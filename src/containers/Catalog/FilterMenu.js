@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import Filter from './Filter'; 
 import { FilterMenuWrapper, FilterButtonsWrapper, ApplyButton } from './Catalog.styled'; 
+import { Input } from 'antd'; 
+import { SearchOutlined } from '@ant-design/icons'; 
 
-const FilterMenu = ({ onApply }) => {
+const FilterMenu = ({ onApply, onSearch }) => {
     const [filters, setFilters] = useState({
         durationFilter: ''
     });
+
+    const [searchTerm, setSearchTerm] = useState('');
 
     const handleFilterChange = (e) => {
         setFilters({
@@ -14,8 +18,15 @@ const FilterMenu = ({ onApply }) => {
     };
 
     const handleApply = () => {
-        // Викликаємо функцію для фільтрації фільмів
         onApply(filters);
+    };
+
+    const handleSearchChange = (e) => {
+        const term = e.target.value;
+        setSearchTerm(term);
+        if (onSearch) {
+            onSearch(term); 
+        }
     };
 
     return (
@@ -33,7 +44,16 @@ const FilterMenu = ({ onApply }) => {
                     ]}
                 />
             </FilterButtonsWrapper>
-            <ApplyButton onClick={handleApply}>Apply</ApplyButton>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Input
+                    placeholder="Search movies"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    style={{ width: '200px' }}
+                    suffix={<SearchOutlined />}
+                />
+                <ApplyButton onClick={handleApply}>Apply</ApplyButton>
+            </div>
         </FilterMenuWrapper>
     );
 };

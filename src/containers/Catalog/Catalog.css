@@ -64,3 +64,33 @@
     flex-wrap: wrap;
     margin: 0.5%;
 } */
+
+/* MovieSearch.css */
+
+.search-container {
+    margin-top: 20px;
+    text-align: right;
+    margin-right: 50px;
+}
+
+.search-container input {
+    width: 200px;
+    padding: 5px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    outline: none;
+}
+
+.search-container input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+
+/* Стилі для іконки */
+.search-container .ant-input-suffix svg {
+    color: #1890ff; /* Колір іконки */
+    font-size: 20px; /* Розмір іконки */
+}

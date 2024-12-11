@@ -1,68 +1,68 @@
-import React, { useState } from "react";
-// import Filter from "./Filter";
-// import ButtonCatalog from "./ButtonCatalog";
-// import ModelPicture from "../../Icons/model.png";
-import ImageModel1 from "../../Icons/image-model1.png";
-// import ImageModel2 from "../../Icons/image_model.png";
-// import ImageModel3 from "../../Icons/image-model3.png";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import FilterMenu from "./FilterMenu";
 import {
-    // SectionWrapper,
-    // StyledText,
-    // StyledButton,
     CardWrapper,
 } from "./Catalog.styled";
 import CardItem2 from "../../components/CardItem/CardItem2";
-
-
-
-export const allFilms = [
-    { id: 1, title: "Winter Bliss", image: ImageModel1, duration: "60", reviews: "reviews: 100" },
-    { id: 2, title: "Summer Vibes", image: ImageModel1, duration: "120", reviews: "reviews: 120" },
-    { id: 3, title: "Autumn Dreams", image: ImageModel1, duration: "90", reviews: "reviews: 80" },
-    { id: 4, title: "Spring Awakening", image: ImageModel1, duration: "130", reviews: "reviews: 150" }
-];
+import "./Loaded.css";
 
 const FilmsList = () => {
-    const [filteredFilms, setFilteredFilms] = useState(allFilms);  
+    const [films, setFilms] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filters, setFilters] = useState({
+        durationFilter: "",
+    });
+
+    const [loading, setLoading] = useState(true);
+    const [isSpinnerVisible, setIsSpinnerVisible] = useState(true);
+
+    const fetchFilms = async (search = "", durationFilter = "") => {
+        try {
+            setLoading(true);
+            const response = await axios.get("http://localhost:1338/api/films", {
+                params: { searchTerm: search, durationFilter }, 
+            });
+            setFilms(response.data);
+            setLoading(false);
+            setIsSpinnerVisible(false);
+        } catch (error) {
+            console.error("Error fetching films:", error);
+        }
+    };
+    
+    useEffect(() => {
+        fetchFilms();
+    }, []);
 
     const handleApplyFilters = (filters) => {
-        const { durationFilter } = filters;
+        setFilters(filters);
+        fetchFilms(searchTerm, filters.durationFilter);
+    };
 
-        const filtered = allFilms.filter(film => {
-            const duration = parseInt(film.duration, 10);  
-
-            if (durationFilter === 'under60') {
-                return duration < 60;
-            }
-            if (durationFilter === 'under120') {
-                return duration >= 60 && duration < 120;
-            }
-            if (durationFilter === 'over120') {
-                return duration >= 120;
-            }
-            return true;  
-        });
-
-        setFilteredFilms(filtered);
+    const handleSearch = (term) => {
+        setSearchTerm(term);
+        fetchFilms(term, filters.durationFilter);
     };
 
     return (
         <div>
-            <FilterMenu onApply={handleApplyFilters} />
-            <CardWrapper>
-                {filteredFilms.map((film, idx) => (
-                    <CardItem2
-                        id = {film.id}
-                        key={idx}
-                        
-                        title={film.title}
-                        imageSrc={film.image}
-                        duration={`Duration: ${film.duration} min`}
-                        reviews={film.reviews}
-                    />
-                ))}
-            </CardWrapper>
+            <FilterMenu onApply={handleApplyFilters} onSearch={handleSearch} />
+            {isSpinnerVisible && <div className="loader"></div>}
+            {!isSpinnerVisible && !loading && (
+                <CardWrapper>
+                    {films.map((film, idx) => (
+                        <CardItem2
+                            id={film.id}
+                            key={idx}
+                            title={film.name}
+                            imageSrc={film.image}
+                            duration={`Duration: ${film.duration} min`}
+                            reviews={film.reviews}
+                        />
+                    ))}
+                </CardWrapper>
+            )}
         </div>
     );
 };

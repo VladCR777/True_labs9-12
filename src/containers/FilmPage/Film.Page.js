@@ -1,22 +1,48 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import { allFilms } from "../Catalog/Catalog";  
-
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addToCart } from "../Redux/Actions";
+import axios from 'axios';
+import "./Film.Page.css";
+import { useParams } from 'react-router-dom';  
 const FilmPage = () => {
-    const { id } = useParams(); 
-    const film = allFilms.find(f => f.id === parseInt(id)); 
+    const { id } = useParams();  
+    const dispatch = useDispatch();
+    const [film, setFilm] = useState(null);  
+    const [loading, setLoading] = useState(true);  
+
+    const fetchFilmData = async () => {
+        try {
+            const response = await axios.get(`http://localhost:1338/api/films/${id}`);
+            setFilm(response.data);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching film data:', error);
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchFilmData();
+    }, [id]); 
+
+    const handleAddToCart = () => {
+        dispatch(addToCart(film));
+    };
+
+    if (loading) {
+        return <p>Loading...</p>; 
+    }
 
     if (!film) {
-        return <div>Film not found</div>;
+        return <p>Film not found</p>;  
     }
 
     return (
-        <div>
-            <h1>{film.title}</h1>
-            <img src={film.image} alt={film.title} />
-            <p>{film.description}</p>
-            <p>{film.duration}</p>
-            <p>{film.reviews} reviews</p>
+        <div className="film-page">
+            <h2>{film.name}</h2>
+            <p>Duration: {film.duration} min</p>
+            <p>Reviews: {film.reviews}</p>
+            <button onClick={handleAddToCart}>Add to Cart</button>
         </div>
     );
 };

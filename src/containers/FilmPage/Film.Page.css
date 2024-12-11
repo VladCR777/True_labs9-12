@@ -1,0 +1,54 @@
+
+.film-page {
+    max-width: 800px;
+    margin: 0 auto; 
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
+.film-page h1 {
+    font-size: 2rem;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.film-page img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 20px auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.film-page p {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+
+.film-page p.description {
+    font-style: italic;
+    color: #777;
+}
+
+
+.film-page p.reviews {
+    font-weight: bold;
+    color: #222;
+    margin-top: 15px;
+    text-align: center;
+}
+
+.film-page p.duration {
+    font-weight: bold;
+    color: #222;
+    margin-top: 15px;
+    text-align: center;
+}

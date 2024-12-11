@@ -1,7 +1,7 @@
-import React from "react";
+// import React from "react";
 
-function Cart() {
-    return <h2>Hello this is Cart page</h2>;
-}
+// function Cart() {
+//     return <h2>Hello this is Cart page</h2>;
+// }
 
-export default Cart;
+// export default Cart;
